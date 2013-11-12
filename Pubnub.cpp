@@ -12,8 +12,22 @@ Pubnub::Pubnub(const QString &_hostname) {
 	connect(c, SIGNAL(bytesWritten(qint64)), this, SLOT(flush()));
 	connect(c, SIGNAL(error(QAbstractSocket::SocketError)), this, SLOT(disconnected()));
 	connect(c, SIGNAL(disconnected()), this, SLOT(disconnected()));
+	connect(&t, SIGNAL(timeout()), this, SLOT(check()));
 
 	c->connectToHost(hostname, 80);
+	t.setSingleShot(false);
+	t.start(15000);
+}
+
+void Pubnub::check() {
+	// check status of connection to pubnub
+	switch(c->state()) {
+		case QAbstractSocket::ConnectedState:
+			break;
+		deault:
+			// in any other state than ConnectedState: force disconnection/Reconnection
+			disconnected();
+	}
 }
 
 void Pubnub::message(const QByteArray &msg) {
@@ -29,9 +43,12 @@ void Pubnub::connected() {
 
 void Pubnub::disconnected() {
 	c->close();
+	qDebug("lost connection");
 	can_write = false;
 	// try to connect
 	c->connectToHost(hostname, 80);
+	// reset timer to 15 secs
+	t.start(15000);
 }
 
 void Pubnub::doRead() {

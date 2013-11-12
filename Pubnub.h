@@ -1,4 +1,5 @@
 #include <QTcpSocket>
+#include <QTimer>
 #include "QUnixSocket.h"
 
 class Pubnub: public QObject {
@@ -12,6 +13,7 @@ public slots:
 	void flush();
 	void doRead();
 	void message(const QByteArray &);
+	void check();
 
 private:
 	bool genPacket(); // generate packet
@@ -19,6 +21,7 @@ private:
 	QUnixSocket *s;
 	QTcpSocket *c;
 	QString hostname;
+	QTimer t;
 	bool can_write;
 
 	QList<QByteArray> queue;
