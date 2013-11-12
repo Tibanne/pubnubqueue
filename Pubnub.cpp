@@ -24,7 +24,7 @@ void Pubnub::check() {
 	switch(c->state()) {
 		case QAbstractSocket::ConnectedState:
 			break;
-		deault:
+		default:
 			// in any other state than ConnectedState: force disconnection/Reconnection
 			disconnected();
 	}
