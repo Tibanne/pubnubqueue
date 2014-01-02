@@ -5,7 +5,7 @@
 class Pubnub: public QObject {
 	Q_OBJECT;
 public:
-	Pubnub(const QString &_hostname);
+	Pubnub(const QString &_hostname, const QString &_path);
 
 public slots:
 	void connected();

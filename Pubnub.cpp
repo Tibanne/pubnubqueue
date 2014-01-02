@@ -1,8 +1,8 @@
 #include "Pubnub.h"
 
-Pubnub::Pubnub(const QString &_hostname) {
+Pubnub::Pubnub(const QString &_hostname, const QString &_path) {
 	hostname = _hostname;
-	s = new QUnixSocket("/tmp/pubnub.sock", this);
+	s = new QUnixSocket(_path, this);
 	c = new QTcpSocket(this);
 	can_write = false;
 
